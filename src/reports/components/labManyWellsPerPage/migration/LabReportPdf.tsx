@@ -1,18 +1,23 @@
-import type { Sample } from "../../interfaces/Types";
-import AnalyticalResultsTable from "../components/labManyWellsPerPage/AnalyticalResultsTable";
-import DetectionSummaryTable from "../components/labManyWellsPerPage/DetectionSummaryTable";
-import SamplesSummary from "../components/labManyWellsPerPage/SamplesSummary";
-import ReportPage from "../components/ReportPage";
+import { Document, Page, Image } from '@react-pdf/renderer';
+import type { Sample } from '../../../../interfaces/Types';
+import { Header } from './Header';
+import { styles } from './styles';
+import { HeaderCommon } from './HeaderCommon';
+import { SamplesSummary } from './SamplesSummary';
+import { Footer } from './Footer';
+import { AnalyticalResultsTable } from './AnalyticalResultsTable';
+import { DetectionSummaryTable } from './DetectionSummaryTable';
+import { paginateSamples } from '../../../utils/paginateSamples';
+import { AnalyticalResultsHeader } from './AnalyticalResultsHeader';
+import AnalyticalResultItemPaginated from '../AnalyticalResultItemPaginated';
+import { DetectionSummaryHeader } from './DetectionSummaryHeader';
+import { DetectionSummaryResultItem } from './DetectionSummaryResultItem';
 
-function LabManyWellsPerPage ({ 
+interface LabReportPDFProps {
+    clientNameOrg: string;
+}
 
-    clientNameOrg,
-
-}: { 
-    clientNameOrg: string,
-
-}) {
-
+export const LabReportPDF: React.FC<LabReportPDFProps> = ({ clientNameOrg }) => {
     const projectData = {
         projectName: "LABS INC",
         labReceivedDate: "04/07/25 12:43:00",
@@ -27,7 +32,6 @@ function LabManyWellsPerPage ({
         clientProjectNumber: "US0041111.8242.02",
         labReportingBatchID: "2504013"
     };
-
 
     const samplesData = [
         {
@@ -150,159 +154,106 @@ function LabManyWellsPerPage ({
         ]
     },
     {
-        clientSampleId: "MW-03",
-        labSampleId: "2504013-003",
-        dateCollected: "04/07/25 11:45:00",
-        collectedBy: "Mike Thompson",
+        clientSampleId: "MW-01",
+        labSampleId: "2504013-001",
+        dateCollected: "04/07/25 09:15:00",
+        collectedBy: "John Martinez",
         matrixId: "Groundwater",
         sampleTests: [
             {
-                analyteName: "Benzene",
-                analyteId: "BZ-71432",
-                results: "< 0.5",
-                units: "μg/L",
-                df: "1",
-                mdl: "0.2",
-                pql: "0.5",
-                method: "EPA 8260D",
-                analyzedDate: "04/10/25",
-                by: "DW",
-                batch: "B2504-03",
-                note: "U"
-            },
-            {
-                analyteName: "Toluene",
-                analyteId: "TOL-108",
-                results: "1.8",
-                units: "μg/L",
-                df: "1",
-                mdl: "0.2",
-                pql: "0.5",
-                method: "EPA 8260D",
-                analyzedDate: "04/10/25",
-                by: "DW",
-                batch: "B2504-03",
-                note: ""
-            },
-            {
-                analyteName: "Xylenes, Total",
-                analyteId: "XYL-1330",
-                results: "< 0.5",
-                units: "μg/L",
-                df: "1",
-                mdl: "0.3",
-                pql: "0.5",
-                method: "EPA 8260D",
-                analyzedDate: "04/10/25",
-                by: "DW",
-                batch: "B2504-03",
-                note: "U"
-            }
-        ]
-    },
-    {
-        clientSampleId: "SW-01",
-        labSampleId: "2504013-004",
-        dateCollected: "04/07/25 13:20:00",
-        collectedBy: "Emily Rodriguez",
-        matrixId: "Surface Water",
-        sampleTests: [
-            {
-                analyteName: "Nitrate as N",
-                analyteId: "NO3-14797",
-                results: "5.6",
-                units: "mg/L",
+                analyteName: "pH",
+                analyteId: "PH-001",
+                results: "7.2",
+                units: "pH units",
                 df: "1",
                 mdl: "0.1",
                 pql: "0.5",
-                method: "EPA 353.2",
-                analyzedDate: "04/08/25",
-                by: "TC",
-                batch: "B2504-04",
-                note: ""
-            },
-            {
-                analyteName: "Phosphorus, Total",
-                analyteId: "P-7723",
-                results: "0.85",
-                units: "mg/L",
-                df: "1",
-                mdl: "0.05",
-                pql: "0.1",
-                method: "EPA 365.1",
-                analyzedDate: "04/08/25",
-                by: "TC",
-                batch: "B2504-04",
-                note: ""
-            },
-            {
-                analyteName: "BOD, 5-day",
-                analyteId: "BOD-001",
-                results: "12.5",
-                units: "mg/L",
-                df: "1",
-                mdl: "2",
-                pql: "2",
-                method: "SM 5210B",
-                analyzedDate: "04/12/25",
-                by: "AM",
-                batch: "B2504-04",
-                note: ""
-            }
-        ]
-    },
-    {
-        clientSampleId: "SW-02",
-        labSampleId: "2504013-005",
-        dateCollected: "04/07/25 14:50:00",
-        collectedBy: "David Park",
-        matrixId: "Surface Water",
-        sampleTests: [
-            {
-                analyteName: "E. coli",
-                analyteId: "ECOLI-001",
-                results: "75",
-                units: "MPN/100mL",
-                df: "1",
-                mdl: "1",
-                pql: "1",
-                method: "SM 9223B",
-                analyzedDate: "04/09/25",
-                by: "KL",
-                batch: "B2504-05",
-                note: ""
-            },
-            {
-                analyteName: "Total Coliform",
-                analyteId: "TCOLI-001",
-                results: "240",
-                units: "MPN/100mL",
-                df: "1",
-                mdl: "1",
-                pql: "1",
-                method: "SM 9223B",
-                analyzedDate: "04/09/25",
-                by: "KL",
-                batch: "B2504-05",
-                note: ""
-            },
-            {
-                analyteName: "Turbidity",
-                analyteId: "TURB-001",
-                results: "3.5",
-                units: "NTU",
-                df: "1",
-                mdl: "0.1",
-                pql: "0.5",
-                method: "EPA 180.1",
+                method: "EPA 150.1",
                 analyzedDate: "04/08/25",
                 by: "JM",
-                batch: "B2504-05",
+                batch: "B2504-01",
+                note: ""
+            },
+            {
+                analyteName: "Conductivity",
+                analyteId: "COND-001",
+                results: "450",
+                units: "μS/cm",
+                df: "1",
+                mdl: "1",
+                pql: "5",
+                method: "EPA 120.1",
+                analyzedDate: "04/08/25",
+                by: "JM",
+                batch: "B2504-01",
+                note: ""
+            },
+            {
+                analyteName: "Total Dissolved Solids",
+                analyteId: "TDS-001",
+                results: "285",
+                units: "mg/L",
+                df: "1",
+                mdl: "5",
+                pql: "10",
+                method: "SM 2540C",
+                analyzedDate: "04/08/25",
+                by: "LS",
+                batch: "B2504-01",
                 note: ""
             }
         ]
-    }, {
-
+    },{
+        clientSampleId: "MW-01",
+        labSampleId: "2504013-001",
+        dateCollected: "04/07/25 09:15:00",
+        collectedBy: "John Martinez",
+        matrixId: "Groundwater",
+        sampleTests: [
+            {
+                analyteName: "pH",
+                analyteId: "PH-001",
+                results: "7.2",
+                units: "pH units",
+                df: "1",
+                mdl: "0.1",
+                pql: "0.5",
+                method: "EPA 150.1",
+                analyzedDate: "04/08/25",
+                by: "JM",
+                batch: "B2504-01",
+                note: ""
+            },
+            {
+                analyteName: "Conductivity",
+                analyteId: "COND-001",
+                results: "450",
+                units: "μS/cm",
+                df: "1",
+                mdl: "1",
+                pql: "5",
+                method: "EPA 120.1",
+                analyzedDate: "04/08/25",
+                by: "JM",
+                batch: "B2504-01",
+                note: ""
+            },
+            {
+                analyteName: "Total Dissolved Solids",
+                analyteId: "TDS-001",
+                results: "285",
+                units: "mg/L",
+                df: "1",
+                mdl: "5",
+                pql: "10",
+                method: "SM 2540C",
+                analyzedDate: "04/08/25",
+                by: "LS",
+                batch: "B2504-01",
+                note: ""
+            }
+        ]
+    },{
         clientSampleId: "MW-01",
         labSampleId: "2504013-001",
         dateCollected: "04/07/25 09:15:00",
@@ -355,51 +306,50 @@ function LabManyWellsPerPage ({
     }
     ];
 
-    const totalPages = 3 + samplesDataTW.length;
+    const paginatedSamples = paginateSamples(samplesDataTW, 30);
+    const paginatedDetections = paginateSamples(samplesDataTW, 30); // Usa los mismos datos
+    
+    const totalPages = 1 + paginatedSamples.length + paginatedDetections.length;
 
     return (
-        <>
-            <style>{`
-                @media print {
-                    .page-break {
-                        page-break-after: always;
-                    }
-                }
-            `}</style>
-
-            {/* Página 1 - Samples Summary */}
-            <ReportPage 
-                pageNumber={1} 
-                totalPages={totalPages}
-                clientName={clientNameOrg}
-                projectData={projectData}
-            >
+        <Document>
+            {/* Página 1 */}
+            <Page size="A4" style={styles.page}>
+                <Header clientName={clientNameOrg} />
+                <HeaderCommon {...projectData} />
                 <SamplesSummary samples={samplesData} />
-            </ReportPage>
+                <Footer pageNumber={1} totalPages={totalPages} />
+            </Page>
 
-            {/* Página 2 - Analytical Results */}
-            <ReportPage 
-                pageNumber={2} 
-                totalPages={totalPages}
-                clientName={clientNameOrg}
-                projectData={projectData}
-                showHeader={false} 
-            >
-                <AnalyticalResultsTable samplesData={samplesDataTW} />
-            </ReportPage>
+            {/* Páginas Analytical Results */}
+            {paginatedSamples.map((pageSamples, pageIndex) => (
+                <Page key={pageIndex} size="A4" style={styles.page}>
+                    <HeaderCommon {...projectData} />
+                    <AnalyticalResultsHeader />
+                    {pageSamples.map((paginatedSample, i) => (
+                        <AnalyticalResultItemPaginated 
+                            key={i} 
+                            paginatedSample={paginatedSample} 
+                        />
+                    ))}
+                    <Footer pageNumber={1 + pageIndex + 1} totalPages={totalPages} />
+                </Page>
+            ))}
 
-            {/* Página 3 - Detection Summary */}
-            <ReportPage 
-                pageNumber={3} 
-                totalPages={totalPages}
-                clientName={clientNameOrg}
-                projectData={projectData}
-                showHeader={false}
-            >
-                <DetectionSummaryTable samplesData={samplesDataTW} />
-            </ReportPage>
-        </>
+            {/* Páginas Detection Summary */}
+            {paginatedDetections.map((pageSamples, pageIndex) => (
+                <Page key={pageIndex} size="A4" style={styles.page}>
+                    <HeaderCommon {...projectData} />
+                    <DetectionSummaryHeader />
+                    {pageSamples.map((paginatedSample, i) => (
+                        <DetectionSummaryResultItem 
+                            key={i} 
+                            sample={paginatedSample.sample} 
+                        />
+                    ))}
+                    <Footer pageNumber={1 + paginatedSamples.length + pageIndex + 1} totalPages={totalPages} />
+                </Page>
+            ))}
+        </Document>
     );
-}
-
-export default LabManyWellsPerPage;
+};

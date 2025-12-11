@@ -3,26 +3,48 @@ import HeaderCommon from "./common/HeaderCommon";
 import Header from "./labManyWellsPerPage/Header";
 
 interface ReportPageProps {
+
     children: React.ReactNode;
+
     pageNumber: number;
+
     totalPages: number;
+
     clientName: string;
+
     projectData: {
+
         projectName: string;
+
         labReceivedDate: string;
+
         companyName: string;
+
         clientName: string;
+
         clientAddress: string;
+
         city: string;
+
         state: string;
+
         zip: string;
+
+
         projectLocation: string;
+
         clientPhone: string;
+
         clientProjectNumber: string;
+
         labReportingBatchID: string;
+
     };
+
     showHeader?: boolean;
+
     showCommonHeader?: boolean;
+
 }
 
 function ReportPage({ 
